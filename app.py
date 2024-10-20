@@ -7,8 +7,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Set up OpenAI API key and Assistant ID
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-ASSISTANT_ID = os.getenv("OPENAI_ASSISTANT_ID")
+OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+ASSISTANT_ID = st.secrets.get("OPENAI_ASSISTANT_ID") or os.getenv("OPENAI_ASSISTANT_ID")
+
+if not OPENAI_API_KEY or not ASSISTANT_ID:
+    st.error("API Key 或 Assistant ID 未设置。请检查您的环境变量或 Streamlit secrets。")
+    st.stop()
+
 
 # Initialize OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
